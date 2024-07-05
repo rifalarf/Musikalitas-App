@@ -29,7 +29,7 @@ class TentangAplikasiPage extends StatelessWidget {
                 const CircleAvatar(
                   radius: 50,
                   backgroundImage:
-                      AssetImage('assets/images/profile.jpg'), // Gambar profil
+                      AssetImage('assets/images/profile.png'), // Gambar profil
                 ),
                 const SizedBox(height: 20),
                 const Text(
@@ -38,7 +38,7 @@ class TentangAplikasiPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'Pembuat aplikasi ini adalah seorang pengembang perangkat lunak yang berpengalaman dalam membangun aplikasi mobile dan web.',
+                  'Seorang mahasiswa ambisius dan penuh semangat, sedang mengejar gelar S1 Teknik Informatika di Institut Teknologi Garut. la berdedikasi untuk mengembangkan keterampilan di bidang pemrograman dan desain grafis, serta pernah berpengalaman sebagai asisten dosen dalam mata kuliah praktikum grafik komputer.',
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 16),
                 ),
