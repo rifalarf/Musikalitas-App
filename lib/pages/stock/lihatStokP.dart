@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/stok.dart'; // Import model Stok
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/stok.dart'; // Import model Stok
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class LihatStokProdukPage extends StatefulWidget {
+class viewStockProduct extends StatefulWidget {
+  const viewStockProduct({super.key});
+
   @override
   _LihatStokProdukPageState createState() => _LihatStokProdukPageState();
 }
 
-class _LihatStokProdukPageState extends State<LihatStokProdukPage> {
+class _LihatStokProdukPageState extends State<viewStockProduct> {
   late Future<List<Stok>> _stokList;
 
   @override
@@ -35,19 +37,19 @@ class _LihatStokProdukPageState extends State<LihatStokProdukPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Lihat Stok'),
-      backgroundColor: Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
+      appBar: const CustomAppBar(title: 'Lihat Stok'),
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<List<Stok>>(
           future: _stokList,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('Tidak ada stok tersedia'));
+              return const Center(child: Text('Tidak ada stok tersedia'));
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,

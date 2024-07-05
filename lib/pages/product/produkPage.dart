@@ -1,50 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/sales.dart'; // Import model Sales
-import 'tambah_sales_page.dart'; // Import TambahSalesPage
-import 'edit_sales_page.dart'; // Import EditSalesPage
-import 'lihat_produk_page.dart'; // Import LihatProdukPage
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/produk.dart'; // Import model Produk
+import 'tambahProduk.dart'; // Import AddProduct
+import 'editProduk.dart'; // Import editProduk
+import '../stock/lihatStokP.dart'; // Import viewStockProduct
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class SalesSayaPage extends StatefulWidget {
+class myProduct extends StatefulWidget {
+  const myProduct({super.key});
+
   @override
-  _SalesSayaPageState createState() => _SalesSayaPageState();
+  _ProdukSayaPageState createState() => _ProdukSayaPageState();
 }
 
-class _SalesSayaPageState extends State<SalesSayaPage> {
-  late Future<List<Sales>> _salesList;
+class _ProdukSayaPageState extends State<myProduct> {
+  late Future<List<Produk>> _produkList;
 
   @override
   void initState() {
     super.initState();
-    _salesList = _fetchSales();
+    _produkList = _fetchProduk();
   }
 
-  Future<List<Sales>> _fetchSales() async {
-    String apiUrl = 'https://api.kartel.dev/sales';
+  Future<List<Produk>> _fetchProduk() async {
+    String apiUrl = 'https://api.kartel.dev/products';
     try {
       var response = await Dio().get(apiUrl);
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
-        return data.map((json) => Sales.fromJson(json)).toList();
+        return data.map((json) => Produk.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to load sales');
+        throw Exception('Failed to load produk');
       }
     } catch (e) {
-      throw Exception('Failed to load sales: $e');
+      throw Exception('Failed to load produk: $e');
     }
   }
 
-  Future<void> _navigateToTambahSales() async {
+  Future<void> _navigateToTambahProduk() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => TambahSalesPage()),
+      MaterialPageRoute(builder: (context) => const AddProduct()),
     );
 
     if (result == true) {
       setState(() {
-        _salesList = _fetchSales();
+        _produkList = _fetchProduk();
       });
     }
   }
@@ -52,7 +54,7 @@ class _SalesSayaPageState extends State<SalesSayaPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -64,10 +66,10 @@ class _SalesSayaPageState extends State<SalesSayaPage> {
                   child: CustomButton(
                     text: 'Tambah',
                     icon: FontAwesomeIcons.plus,
-                    onPressed: _navigateToTambahSales,
+                    onPressed: _navigateToTambahProduk,
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: CustomButton(
                     text: 'Edit',
@@ -76,61 +78,64 @@ class _SalesSayaPageState extends State<SalesSayaPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => EditSalesPage()),
+                            builder: (context) => const editProduk()),
                       );
                     },
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: CustomButton(
-                    text: 'Produk',
+                    text: 'Stok',
                     icon: FontAwesomeIcons.eye,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => LihatProdukPage()),
+                            builder: (context) => const viewStockProduct()),
                       );
                     },
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-                child: Column(
+                child: const Column(
               children: [
                 Text(
-                  "Sales",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  "Produk",
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 )
               ],
             )),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
-              child: FutureBuilder<List<Sales>>(
-                future: _salesList,
+              child: FutureBuilder<List<Produk>>(
+                future: _produkList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('Tidak ada sales tersedia'));
+                    return const Center(child: Text('Tidak ada produk tersedia'));
                   } else {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        Sales sales = snapshot.data![index];
+                        Produk produk = snapshot.data![index];
                         return Card(
                           child: ListTile(
-                            title: Text(sales.buyer),
+                            title: Text(produk.name),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Phone: ${sales.phone}, Date: ${sales.date}, Status: ${sales.status}'),
+                                    'Harga: ${produk.price}, Kuantitas: ${produk.qty}, Atribut: ${produk.attr}, Berat: ${produk.weight}'),
                               ],
                             ),
                           ),

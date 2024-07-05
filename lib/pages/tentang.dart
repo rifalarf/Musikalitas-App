@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import 'package:flutter/material.dart'; // Import Custom Widgets
 
 class TentangAplikasiPage extends StatelessWidget {
   const TentangAplikasiPage({super.key});
@@ -18,28 +17,28 @@ class TentangAplikasiPage extends StatelessWidget {
                   244, 238, 255, 1), // Warna latar belakang
               borderRadius: BorderRadius.circular(10), // Radius sudut
             ),
-            child: Column(
+            child: const Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
-                const Text(
+                Text(
                   'Tentang Pembuat',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 20),
-                const CircleAvatar(
+                SizedBox(height: 20),
+                CircleAvatar(
                   radius: 50,
                   backgroundImage:
                       AssetImage('assets/images/profile.png'), // Gambar profil
                 ),
-                const SizedBox(height: 20),
-                const Text(
+                SizedBox(height: 20),
+                Text(
                   'Ainun Alvia Fauziah',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                const SizedBox(height: 10),
-                const Text(
+                SizedBox(height: 10),
+                Text(
                   'Seorang mahasiswa ambisius dan penuh semangat, sedang mengejar gelar S1 Teknik Informatika di Institut Teknologi Garut. la berdedikasi untuk mengembangkan keterampilan di bidang pemrograman dan desain grafis, serta pernah berpengalaman sebagai asisten dosen dalam mata kuliah praktikum grafik komputer.',
-                  textAlign: TextAlign.center,
+                  textAlign: TextAlign.justify,
                   style: TextStyle(fontSize: 16),
                 ),
               ],

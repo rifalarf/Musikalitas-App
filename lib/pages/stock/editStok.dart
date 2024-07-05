@@ -1,41 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/produk.dart'; // Import model Produk
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
-import 'edit_produk_form.dart'; // Import EditProdukForm
+import '../../models/stok.dart'; // Import model Stok
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
+import 'editFormStok.dart'; // Import EditStockForm
 
-class EditProdukPage extends StatefulWidget {
-  const EditProdukPage({super.key});
+class editStock extends StatefulWidget {
+  const editStock({super.key});
 
   @override
-  _EditProdukPageState createState() => _EditProdukPageState();
+  _EditStokPageState createState() => _EditStokPageState();
 }
 
-class _EditProdukPageState extends State<EditProdukPage> {
-  late Future<List<Produk>> _produkList;
+class _EditStokPageState extends State<editStock> {
+  late Future<List<Stok>> _stokList;
 
   @override
   void initState() {
     super.initState();
-    _produkList = _fetchProduk();
+    _stokList = _fetchStok();
   }
 
-  Future<List<Produk>> _fetchProduk() async {
-    String apiUrl = 'https://api.kartel.dev/products';
+  Future<List<Stok>> _fetchStok() async {
+    String apiUrl = 'https://api.kartel.dev/stocks';
     try {
       var response = await Dio().get(apiUrl);
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
-        return data.map((json) => Produk.fromJson(json)).toList();
+        return data.map((json) => Stok.fromJson(json)).toList();
       } else {
-        throw Exception('Failed to load produk');
+        throw Exception('Failed to load stok');
       }
     } catch (e) {
-      throw Exception('Failed to load produk: $e');
+      throw Exception('Failed to load stok: $e');
     }
   }
 
-  Future<void> _deleteProduk(String id) async {
+  Future<void> _deleteStok(String id) async {
     bool confirm = await showDialog(
       context: context,
       builder: (context) {
@@ -57,19 +57,19 @@ class _EditProdukPageState extends State<EditProdukPage> {
     );
 
     if (confirm) {
-      String apiUrl = 'https://api.kartel.dev/products/$id';
+      String apiUrl = 'https://api.kartel.dev/stocks/$id';
       try {
         var response = await Dio().delete(apiUrl);
         if (response.statusCode == 200 || response.statusCode == 204) {
-          // Jika berhasil, refresh daftar produk
+          // Jika berhasil, refresh daftar stok
           setState(() {
-            _produkList = _fetchProduk();
+            _stokList = _fetchStok();
           });
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
-                    Text('Gagal menghapus produk: ${response.statusMessage}')),
+                    Text('Gagal menghapus stok: ${response.statusMessage}')),
           );
         }
       } catch (e) {
@@ -80,15 +80,15 @@ class _EditProdukPageState extends State<EditProdukPage> {
     }
   }
 
-  Future<void> _editProduk(Produk produk) async {
+  Future<void> _editStok(Stok stok) async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProdukForm(produk: produk)),
+      MaterialPageRoute(builder: (context) => EditStockForm(stok: stok)),
     );
 
     if (result == true) {
       setState(() {
-        _produkList = _fetchProduk();
+        _stokList = _fetchStok();
       });
     }
   }
@@ -96,36 +96,38 @@ class _EditProdukPageState extends State<EditProdukPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Produk'),
+      appBar: const CustomAppBar(title: 'Edit Stok'),
       backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             Expanded(
-              child: FutureBuilder<List<Produk>>(
-                future: _produkList,
+              child: FutureBuilder<List<Stok>>(
+                future: _stokList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                        child: Text('Tidak ada produk tersedia'));
+                    return const Center(child: Text('Tidak ada stok tersedia'));
                   } else {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
                       itemBuilder: (context, index) {
-                        Produk produk = snapshot.data![index];
+                        Stok stok = snapshot.data![index];
                         return Card(
                           child: ListTile(
-                            title: Text(produk.name),
+                            title: Text(stok.name),
                             subtitle: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Harga: ${produk.price}, Kuantitas: ${produk.qty}, Atribut: ${produk.attr}, Berat: ${produk.weight}'),
+                                    'Jumlah: ${stok.qty}, Atribut: ${stok.attr}, Berat: ${stok.weight}'),
+                                Text('Penyedia: ${stok.issuer}'),
+                                Text('Dibuat pada: ${stok.createdAt}'),
+                                Text('Terakhir diubah: ${stok.updatedAt}'),
                               ],
                             ),
                             trailing: Row(
@@ -135,14 +137,14 @@ class _EditProdukPageState extends State<EditProdukPage> {
                                   icon: const Icon(Icons.edit,
                                       color: Colors.blue),
                                   onPressed: () {
-                                    _editProduk(produk);
+                                    _editStok(stok);
                                   },
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.delete,
                                       color: Colors.red),
                                   onPressed: () {
-                                    _deleteProduk(produk.id);
+                                    _deleteStok(stok.id);
                                   },
                                 ),
                               ],

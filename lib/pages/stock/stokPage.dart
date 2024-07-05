@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import '../models/stok.dart'; // Import model Stok
-import 'tambah_stok_page.dart'; // Import TambahStokPage
-import 'edit_stok_page.dart'; // Import EditStokPage
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/stok.dart'; // Import model Stok
+import 'tambahStok.dart'; // Import AddStock
+import 'editStok.dart'; // Import editStock
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class StokSayaPage extends StatefulWidget {
-  const StokSayaPage({super.key});
+class MyStock extends StatefulWidget {
+  const MyStock({super.key});
 
   @override
   _StokSayaPageState createState() => _StokSayaPageState();
 }
 
-class _StokSayaPageState extends State<StokSayaPage> {
+class _StokSayaPageState extends State<MyStock> {
   late Future<List<Stok>> _stokList;
 
   @override
@@ -40,7 +40,7 @@ class _StokSayaPageState extends State<StokSayaPage> {
   Future<void> _navigateToTambahStok() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => const TambahStokPage()),
+      MaterialPageRoute(builder: (context) => const AddStock()),
     );
 
     if (result == true) {
@@ -77,16 +77,16 @@ class _StokSayaPageState extends State<StokSayaPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const EditStokPage()),
+                            builder: (context) => const editStock()),
                       );
                     },
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
-                child: Column(
+                child: const Column(
               children: [
                 Text(
                   "Stok",
@@ -94,7 +94,7 @@ class _StokSayaPageState extends State<StokSayaPage> {
                 )
               ],
             )),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: FutureBuilder<List<Stok>>(
                 future: _stokList,

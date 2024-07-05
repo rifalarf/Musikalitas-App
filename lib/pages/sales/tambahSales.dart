@@ -1,62 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/stok.dart'; // Import model Stok
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/sales.dart'; // Import model Sales
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class EditStokForm extends StatefulWidget {
-  final Stok stok;
-
-  const EditStokForm({super.key, required this.stok});
+class addSales extends StatefulWidget {
+  const addSales({super.key});
 
   @override
-  _EditStokFormState createState() => _EditStokFormState();
+  _TambahSalesPageState createState() => _TambahSalesPageState();
 }
 
-class _EditStokFormState extends State<EditStokForm> {
+class _TambahSalesPageState extends State<addSales> {
   final _formKey = GlobalKey<FormState>();
-  late String _nama;
-  late int _Jumlah;
-  late String _atribut;
-  late double _berat;
-  late String _issuer;
-
-  @override
-  void initState() {
-    super.initState();
-    _nama = widget.stok.name;
-    _Jumlah = widget.stok.qty;
-    _atribut = widget.stok.attr;
-    _berat = widget.stok.weight;
-    _issuer = widget.stok.issuer;
-  }
+  String _buyer = '';
+  String _phone = '';
+  String _date = '';
+  String _status = '';
+  final TextEditingController _dateController = TextEditingController();
 
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
-      // Data yang akan dikirim ke API
-      Stok updatedStok = Stok(
-        id: widget.stok.id,
-        name: _nama,
-        qty: _Jumlah,
-        attr: _atribut,
-        weight: _berat,
-        createdAt: widget.stok.createdAt,
-        updatedAt: DateTime.now(),
-        issuer: _issuer,
+      // Buat objek Sales
+      Sales sales = Sales(
+        id: '', // ID akan dihasilkan oleh server
+        buyer: _buyer,
+        phone: _phone,
+        date: _date,
+        status: _status,
       );
 
       // Endpoint API
-      String apiUrl = 'https://api.kartel.dev/stocks/${widget.stok.id}';
+      String apiUrl = 'https://api.kartel.dev/sales';
 
       try {
         // Logging data yang akan dikirim
-        print('Data yang dikirim: ${updatedStok.toJson()}');
+        print('Data yang dikirim: ${sales.toJson()}');
 
-        // Mengirim PUT request ke API
-        var response = await Dio().put(
+        // Mengirim POST request ke API
+        var response = await Dio().post(
           apiUrl,
-          data: updatedStok.toJson(),
+          data: sales.toJson(),
           options: Options(
             headers: {
               'Content-Type': 'application/json',
@@ -67,14 +52,14 @@ class _EditStokFormState extends State<EditStokForm> {
           ),
         );
 
-        if (response.statusCode == 200 || response.statusCode == 204) {
-          // Jika berhasil, tampilkan notifikasi dan kembali ke halaman sebelumnya dengan hasil true
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          // Jika berhasil, tampilkan notifikasi dan kembali ke halaman Sales Saya dengan hasil true
           await showDialog(
             context: context,
             builder: (context) {
               return AlertDialog(
                 title: const Text('Berhasil'),
-                content: const Text('Stok berhasil diperbarui'),
+                content: const Text('Sales ditambahkan'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -88,17 +73,13 @@ class _EditStokFormState extends State<EditStokForm> {
               );
             },
           );
-        } else if (response.statusCode == 422) {
-          // Jika ada kesalahan validasi, tampilkan pesan error
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Gagal memperbarui stok: ${response.data}')),
-          );
         } else {
           // Jika gagal, tampilkan pesan error
+          print('Error response: ${response.data}');
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
-                    Text('Gagal memperbarui stok: ${response.statusMessage}')),
+                    Text('Gagal untuk menambahsales: ${response.statusMessage}')),
           );
         }
       } catch (e) {
@@ -110,11 +91,28 @@ class _EditStokFormState extends State<EditStokForm> {
     }
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    FocusScope.of(context)
+        .requestFocus(FocusNode()); // Lepaskan fokus dari TextFormField
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null) {
+      setState(() {
+        _date = "${picked.toLocal()}".split(' ')[0];
+        _dateController.text = _date;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Stok'),
-      backgroundColor: const Color.fromRGBO(235, 244, 246, 1), // Warna Scaffold
+      appBar: const CustomAppBar(title: 'Tambah Sales'),
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: SingleChildScrollView(
         padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 16.0),
@@ -123,8 +121,7 @@ class _EditStokFormState extends State<EditStokForm> {
           child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: const Color.fromRGBO(
-                  244, 238, 255, 1), // Warna latar belakang
+              color: const Color.fromRGBO(244, 238, 255, 1), // Warna latar belakang
               borderRadius: BorderRadius.circular(10), // Radius sudut
             ),
             child: Form(
@@ -132,85 +129,62 @@ class _EditStokFormState extends State<EditStokForm> {
               child: Column(
                 children: <Widget>[
                   TextFormField(
-                    initialValue: _nama,
-                    decoration: const InputDecoration(labelText: 'Nama'),
+                    decoration: const InputDecoration(labelText: 'Buyer'),
                     onSaved: (value) {
-                      _nama = value!;
+                      _buyer = value!;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Nama tidak boleh kosong';
+                        return 'Buyer tidak boleh kosong';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
-                    initialValue: _Jumlah.toString(),
-                    decoration: const InputDecoration(labelText: 'Jumlah'),
-                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Phone'),
                     onSaved: (value) {
-                      _Jumlah = int.parse(value!);
+                      _phone = value!;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Jumlah tidak boleh kosong';
-                      }
-                      if (int.tryParse(value) == null) {
-                        return 'Jumlah harus berupa angka';
+                        return 'Phone tidak boleh kosong';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
-                    initialValue: _atribut,
-                    decoration: const InputDecoration(labelText: 'Atribut'),
+                    controller: _dateController,
+                    decoration: const InputDecoration(labelText: 'Date'),
+                    readOnly: true,
+                    onTap: () => _selectDate(context),
                     onSaved: (value) {
-                      _atribut = value!;
+                      _date = value!;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Atribut tidak boleh kosong';
+                        return 'Date tidak boleh kosong';
                       }
                       return null;
                     },
                   ),
                   TextFormField(
-                    initialValue: _berat.toString(),
-                    decoration: const InputDecoration(labelText: 'Berat'),
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
+                    decoration: const InputDecoration(labelText: 'Status'),
                     onSaved: (value) {
-                      _berat = double.parse(value!);
+                      _status = value!;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Berat tidak boleh kosong';
-                      }
-                      if (double.tryParse(value) == null) {
-                        return 'Berat harus berupa angka';
-                      }
-                      return null;
-                    },
-                  ),
-                  TextFormField(
-                    initialValue: _issuer,
-                    decoration: const InputDecoration(labelText: 'Penyedia'),
-                    onSaved: (value) {
-                      _issuer = value!;
-                    },
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Penyedia tidak boleh kosong';
+                        return 'Status tidak boleh kosong';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    margin: const EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(10),
                     child: SizedBox(
-                      width: 100,
                       height: 70,
+                      width: 100,
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromRGBO(
@@ -222,7 +196,7 @@ class _EditStokFormState extends State<EditStokForm> {
                           padding: const EdgeInsets.symmetric(vertical: 20),
                         ),
                         onPressed: _submitForm,
-                        child: const Text('Ubah',
+                        child: const Text('Tambah',
                             style:
                                 TextStyle(fontSize: 18, color: Colors.white)),
                       ),

@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/stok.dart'; // Import model Stok
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/stok.dart'; // Import model Stok
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class TambahStokPage extends StatefulWidget {
-  const TambahStokPage({super.key});
+class AddStock extends StatefulWidget {
+  const AddStock({super.key});
 
   @override
   _TambahStokPageState createState() => _TambahStokPageState();
 }
 
-class _TambahStokPageState extends State<TambahStokPage> {
+class _TambahStokPageState extends State<AddStock> {
   final _formKey = GlobalKey<FormState>();
   String _nama = '';
   int _Jumlah = 0;
@@ -62,7 +62,7 @@ class _TambahStokPageState extends State<TambahStokPage> {
             builder: (context) {
               return AlertDialog(
                 title: const Text('Berhasil'),
-                content: const Text('Stok berhasil ditambahkan'),
+                content: const Text('Stok ditambahkan'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -81,7 +81,7 @@ class _TambahStokPageState extends State<TambahStokPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
-                    Text('Gagal menambah stok: ${response.statusMessage}')),
+                    Text('Gagal untuk menambahstok: ${response.statusMessage}')),
           );
         }
       } catch (e) {
@@ -96,7 +96,7 @@ class _TambahStokPageState extends State<TambahStokPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Tambah Stok'),
+      appBar: const CustomAppBar(title: 'Tambah Stok'),
       backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: SingleChildScrollView(
         padding: EdgeInsets.only(

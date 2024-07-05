@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/produk.dart'; // Import model Produk
-import '../models/stok.dart'; // Import model Stok
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/produk.dart'; // Import model Produk
+import '../../models/stok.dart'; // Import model Stok
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class TambahProdukPage extends StatefulWidget {
-  const TambahProdukPage({super.key});
+class AddProduct extends StatefulWidget {
+  const AddProduct({super.key});
 
   @override
   _TambahProdukPageState createState() => _TambahProdukPageState();
 }
 
-class _TambahProdukPageState extends State<TambahProdukPage> {
+class _TambahProdukPageState extends State<AddProduct> {
   final _formKey = GlobalKey<FormState>();
   String _name = '';
   double _price = 0.0;
@@ -94,7 +94,7 @@ class _TambahProdukPageState extends State<TambahProdukPage> {
             builder: (context) {
               return AlertDialog(
                 title: const Text('Berhasil'),
-                content: const Text('Produk berhasil ditambahkan'),
+                content: const Text('Produk ditambahkan'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -114,7 +114,7 @@ class _TambahProdukPageState extends State<TambahProdukPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
                 content:
-                    Text('Gagal menambah produk: ${response.statusMessage}')),
+                    Text('Gagal untuk menambahproduk: ${response.statusMessage}')),
           );
         }
       } catch (e) {
@@ -141,7 +141,7 @@ class _TambahProdukPageState extends State<TambahProdukPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Tambah Produk'),
+      appBar: const CustomAppBar(title: 'Tambah Produk'),
       backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: SingleChildScrollView(
         padding: EdgeInsets.only(

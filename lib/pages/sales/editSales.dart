@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/sales.dart'; // Import model Sales
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
-import 'edit_sales_form.dart'; // Import EditSalesForm
+import '../../models/sales.dart'; // Import model Sales
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
+import 'editFormSales.dart'; // Import EditSalesForm
 
-class EditSalesPage extends StatefulWidget {
+class editSales extends StatefulWidget {
+  const editSales({super.key});
+
   @override
   _EditSalesPageState createState() => _EditSalesPageState();
 }
 
-class _EditSalesPageState extends State<EditSalesPage> {
+class _EditSalesPageState extends State<editSales> {
   late Future<List<Sales>> _salesList;
 
   @override
@@ -38,16 +40,16 @@ class _EditSalesPageState extends State<EditSalesPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Konfirmasi'),
-          content: Text('Apakah Anda ingin menghapus?'),
+          title: const Text('Konfirmasi'),
+          content: const Text('Apakah Anda ingin menghapus?'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false), // Tidak
-              child: Text('Tidak'),
+              child: const Text('Tidak'),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true), // Ya
-              child: Text('Ya'),
+              child: const Text('Ya'),
             ),
           ],
         );
@@ -94,8 +96,8 @@ class _EditSalesPageState extends State<EditSalesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Sales'),
-      backgroundColor: Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
+      appBar: const CustomAppBar(title: 'Edit Sales'),
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -105,11 +107,11 @@ class _EditSalesPageState extends State<EditSalesPage> {
                 future: _salesList,
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(child: Text('Tidak ada sales tersedia'));
+                    return const Center(child: Text('Tidak ada sales tersedia'));
                   } else {
                     return ListView.builder(
                       itemCount: snapshot.data!.length,
@@ -129,13 +131,13 @@ class _EditSalesPageState extends State<EditSalesPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 IconButton(
-                                  icon: Icon(Icons.edit, color: Colors.blue),
+                                  icon: const Icon(Icons.edit, color: Colors.blue),
                                   onPressed: () {
                                     _editSales(sales);
                                   },
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete, color: Colors.red),
+                                  icon: const Icon(Icons.delete, color: Colors.red),
                                   onPressed: () {
                                     _deleteSales(sales.id);
                                   },

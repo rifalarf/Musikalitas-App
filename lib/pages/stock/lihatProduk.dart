@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/stok.dart'; // Import model Stok
+import '../../models/stok.dart'; // Import model Stok
 
-class LihatStokPage extends StatefulWidget {
-  const LihatStokPage({super.key});
+class viewStock extends StatefulWidget {
+  const viewStock({super.key});
 
   @override
   _LihatStokPageState createState() => _LihatStokPageState();
 }
 
-class _LihatStokPageState extends State<LihatStokPage> {
+class _LihatStokPageState extends State<viewStock> {
   late Future<List<Stok>> _stokList;
 
   @override

@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'stok_saya_page.dart'; // Import StokSayaPage
-import 'produk_saya_page.dart'; // Import ProdukSayaPage
-import 'sales_saya_page.dart'; // Import SalesSayaPage
-import 'tentang_aplikasi_page.dart'; // Import TentangAplikasiPage
+import 'stock/stokPage.dart'; // Import MyStock
+import 'product/produkPage.dart'; // Import myProduct
+import 'sales/salesPage.dart'; // Import mySales
+import 'tentang.dart'; // Import TentangAplikasiPage
 import '../widgets/custom_widgets.dart'; // Import Custom Widgets
 
 class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -53,13 +55,13 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return _buildHomePage();
       case 1:
-        return StokSayaPage();
+        return const MyStock();
       case 2:
-        return ProdukSayaPage();
+        return const myProduct();
       case 3:
-        return SalesSayaPage();
+        return const mySales();
       case 4:
-        return TentangAplikasiPage();
+        return const TentangAplikasiPage();
       default:
         return _buildHomePage();
     }
@@ -81,7 +83,7 @@ class _HomePageState extends State<HomePage> {
       future: _fetchData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(child: CircularProgressIndicator());
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
         } else if (snapshot.hasData) {
@@ -94,15 +96,15 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Text(
                     _getGreeting(),
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    padding: EdgeInsets.all(16),
-                    margin: EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
@@ -110,7 +112,7 @@ class _HomePageState extends State<HomePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             FaIcon(FontAwesomeIcons.infoCircle,
@@ -125,19 +127,19 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _buildFeatureInfo(
-                          icon: FontAwesomeIcons.box,
+                          icon: FontAwesomeIcons.inbox,
                           text:
                               'Stok adalah persediaan barang yang dimiliki oleh bisnis.',
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _buildFeatureInfo(
                           icon: FontAwesomeIcons.cubes,
                           text:
                               'Produk adalah barang atau jasa yang dijual oleh bisnis kepada pelanggan.',
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         _buildFeatureInfo(
                           icon: FontAwesomeIcons.shoppingCart,
                           text:
@@ -147,40 +149,40 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.all(16),
-                    margin: EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(16),
+                    margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: Column(
                       children: [
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            FaIcon(FontAwesomeIcons.box, color: Colors.black),
+                            FaIcon(FontAwesomeIcons.inbox, color: Colors.black),
                             FaIcon(FontAwesomeIcons.cubes, color: Colors.black),
                             FaIcon(FontAwesomeIcons.shoppingCart,
                                 color: Colors.black),
                           ],
                         ),
-                        SizedBox(height: 10),
+                        const SizedBox(height: 10),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             Text(
                               '${data['totalStok']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               '${data['totalProduk']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             Text(
                               '${data['totalSales']}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -202,7 +204,7 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else {
-          return Center(child: Text('No data available'));
+          return const Center(child: Text('No data available'));
         }
       },
     );
@@ -212,11 +214,11 @@ class _HomePageState extends State<HomePage> {
     return Row(
       children: [
         FaIcon(icon, color: Colors.black),
-        SizedBox(width: 10),
+        const SizedBox(width: 10),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(fontSize: 16),
+            style: const TextStyle(fontSize: 16),
           ),
         ),
       ],
@@ -226,8 +228,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Musikalitas', showBackButton: false),
-      backgroundColor: Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
+      appBar: const CustomAppBar(title: 'Musikalitas', showBackButton: false),
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: _buildPage(),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -236,7 +238,7 @@ class _HomePageState extends State<HomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.box),
+            icon: FaIcon(FontAwesomeIcons.inbox),
             label: 'Stok',
           ),
           BottomNavigationBarItem(
@@ -253,7 +255,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromRGBO(66, 72, 116, 1),
+        selectedItemColor: const Color.fromRGBO(66, 72, 116, 1),
         unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),

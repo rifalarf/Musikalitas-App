@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/produk.dart'; // Import model Produk
+import '../../models/produk.dart'; // Import model Produk
 // Import model Stok
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class EditProdukForm extends StatefulWidget {
+class EditProductForm extends StatefulWidget {
   final Produk produk;
 
-  const EditProdukForm({super.key, required this.produk});
+  const EditProductForm({super.key, required this.produk});
 
   @override
   _EditProdukFormState createState() => _EditProdukFormState();
 }
 
-class _EditProdukFormState extends State<EditProdukForm> {
+class _EditProdukFormState extends State<EditProductForm> {
   final _formKey = GlobalKey<FormState>();
   late String _name;
   late double _price;
@@ -74,7 +74,7 @@ class _EditProdukFormState extends State<EditProdukForm> {
             builder: (context) {
               return AlertDialog(
                 title: const Text('Berhasil'),
-                content: const Text('Produk berhasil diperbarui'),
+                content: const Text('Produk diperbarui'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -114,7 +114,7 @@ class _EditProdukFormState extends State<EditProdukForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Produk'),
+      appBar: const CustomAppBar(title: 'Edit Produk'),
       backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: SingleChildScrollView(
         padding: EdgeInsets.only(

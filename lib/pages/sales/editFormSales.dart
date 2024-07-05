@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/sales.dart'; // Import model Sales
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/sales.dart'; // Import model Sales
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
 class EditSalesForm extends StatefulWidget {
   final Sales sales;
 
-  EditSalesForm({required this.sales});
+  const EditSalesForm({super.key, required this.sales});
 
   @override
   _EditSalesFormState createState() => _EditSalesFormState();
@@ -70,8 +70,8 @@ class _EditSalesFormState extends State<EditSalesForm> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: Text('Berhasil'),
-                content: Text('Sales berhasil diperbarui'),
+                title: const Text('Berhasil'),
+                content: const Text('Sales diperbarui'),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -79,7 +79,7 @@ class _EditSalesFormState extends State<EditSalesForm> {
                       Navigator.pop(context,
                           true); // Kembali ke halaman sebelumnya dengan hasil true
                     },
-                    child: Text('OK'),
+                    child: const Text('OK'),
                   ),
                 ],
               );
@@ -128,17 +128,17 @@ class _EditSalesFormState extends State<EditSalesForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Edit Sales'),
-      backgroundColor: Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
+      appBar: const CustomAppBar(title: 'Edit Sales'),
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: SingleChildScrollView(
         padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom + 16.0),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Container(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(244, 238, 255, 1), // Warna latar belakang
+              color: const Color.fromRGBO(244, 238, 255, 1), // Warna latar belakang
               borderRadius: BorderRadius.circular(10), // Radius sudut
             ),
             child: Form(
@@ -147,7 +147,7 @@ class _EditSalesFormState extends State<EditSalesForm> {
                 children: <Widget>[
                   TextFormField(
                     initialValue: _buyer,
-                    decoration: InputDecoration(labelText: 'Buyer'),
+                    decoration: const InputDecoration(labelText: 'Buyer'),
                     onSaved: (value) {
                       _buyer = value!;
                     },
@@ -160,7 +160,7 @@ class _EditSalesFormState extends State<EditSalesForm> {
                   ),
                   TextFormField(
                     initialValue: _phone,
-                    decoration: InputDecoration(labelText: 'Phone'),
+                    decoration: const InputDecoration(labelText: 'Phone'),
                     onSaved: (value) {
                       _phone = value!;
                     },
@@ -173,7 +173,7 @@ class _EditSalesFormState extends State<EditSalesForm> {
                   ),
                   TextFormField(
                     controller: _dateController,
-                    decoration: InputDecoration(labelText: 'Date'),
+                    decoration: const InputDecoration(labelText: 'Date'),
                     readOnly: true,
                     onTap: () => _selectDate(context),
                     onSaved: (value) {
@@ -188,7 +188,7 @@ class _EditSalesFormState extends State<EditSalesForm> {
                   ),
                   TextFormField(
                     initialValue: _status,
-                    decoration: InputDecoration(labelText: 'Status'),
+                    decoration: const InputDecoration(labelText: 'Status'),
                     onSaved: (value) {
                       _status = value!;
                     },
@@ -199,9 +199,9 @@ class _EditSalesFormState extends State<EditSalesForm> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   Container(
-                    margin: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color.fromRGBO(

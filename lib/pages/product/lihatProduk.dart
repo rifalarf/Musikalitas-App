@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
-import '../models/produk.dart'; // Import model Produk
-import '../widgets/custom_widgets.dart'; // Import Custom Widgets
+import '../../models/produk.dart'; // Import model Produk
+import '../../widgets/custom_widgets.dart'; // Import Custom Widgets
 
-class LihatProdukPage extends StatefulWidget {
+class viewProduct extends StatefulWidget {
+  const viewProduct({super.key});
+
   @override
   _LihatProdukPageState createState() => _LihatProdukPageState();
 }
 
-class _LihatProdukPageState extends State<LihatProdukPage> {
+class _LihatProdukPageState extends State<viewProduct> {
   late Future<List<Produk>> _produkList;
 
   @override
@@ -35,19 +37,19 @@ class _LihatProdukPageState extends State<LihatProdukPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Lihat Produk'),
-      backgroundColor: Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
+      appBar: const CustomAppBar(title: 'Lihat Produk'),
+      backgroundColor: const Color.fromRGBO(220, 214, 247, 1), // Warna Scaffold
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: FutureBuilder<List<Produk>>(
           future: _produkList,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('Tidak ada produk tersedia'));
+              return const Center(child: Text('Tidak ada produk tersedia'));
             } else {
               return ListView.builder(
                 itemCount: snapshot.data!.length,
